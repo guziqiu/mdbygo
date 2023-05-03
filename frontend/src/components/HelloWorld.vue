@@ -2,6 +2,8 @@
 import {reactive} from 'vue'
 import {Greet} from '../../wailsjs/go/main/App'
 import { ConnectionList } from '../../wailsjs/go/main/App'
+import { ConnectionCreate } from '../../wailsjs/go/main/App'
+
 
 const data = reactive({
   name: "",
@@ -9,12 +11,16 @@ const data = reactive({
 })
 
 const mess = reactive({
-	code: -100,
-	list: "list",
+	code: 0,
+	list: "",
+	createRes: "",
 })
 
 
 function greet() {
+	ConnectionCreate({"addr":"localhost"}).then(res => {
+		mess.createRes = res;
+	})
 	ConnectionList().then(res => {
 		mess.code = res.code
 		mess.list = res.data
@@ -31,6 +37,7 @@ function greet() {
       <button class="btn" @click="greet">Greet</button>
 	  <div>code:{{ mess.code }}</div>
 	  <div>list:{{ mess.list }}</div>
+	  <div>createRes:{{ mess.createRes }}</div>
     </div>
   </main>
 </template>
